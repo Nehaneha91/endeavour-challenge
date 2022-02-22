@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from simple_linear_regr_utils import generate_data, evaluate
 
@@ -19,8 +20,8 @@ class SimpleLinearRegression:
 
         """
         #ToDO calculate the loss. use the sum of squared error formula for simplicity
-        loss = None
-
+        MSE = np.square(np.subtract(y,y_hat)).mean() 
+        loss = math.sqrt(MSE)
         self.losses.append(loss)
         return loss
 
@@ -43,11 +44,12 @@ class SimpleLinearRegression:
             sets updated W and b to the instance Object (self)
         """
         # ToDo calculate dW & db.
-        dW = None
-        db = None
+        n = len(X)
+        dW = -2/n * (sum([X[i]*(y[i]-y_hat[i]) for i in range(n)]))
+        db = -2/n * (sum([(y[i]-y_hat[i]) for i in range(n)]))
         #  ToDO update the self.W and self.b using the learning rate and the values for dW and db
-        self.W = None
-        self.b = None
+        self.W -= (self.lr * dW)
+        self.b -= (self.lr * db)
 
 
     def fit(self, X, y):
@@ -75,8 +77,7 @@ class SimpleLinearRegression:
         :return:
             y_hat: the predicted output
         """
-        #ToDO calculate the predicted output y_hat. remember the function of a line is defined as y = WX + b
-        y_hat = None
+        y_hat = self.W * X + self.b
         return y_hat
 
 
